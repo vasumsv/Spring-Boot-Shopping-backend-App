@@ -19,6 +19,7 @@ public class CustomerDaoServiceImpl implements CustomerDaoService {
 	ArrayList<Customer> customerList = new ArrayList<Customer>();
 
 	private static Connection connection = null;
+	Customer currentCustomer = new Customer();
 
 	public CustomerDaoServiceImpl() {
 		try {
@@ -87,8 +88,42 @@ public class CustomerDaoServiceImpl implements CustomerDaoService {
 
 	@Override
 	public boolean customerLoginValidation(String username, String password) {
-		// TODO Auto-generated method stub
-		return false;
+		System.out.println("username: "+username+" password: "+password);
+		boolean flag = false;
+		String loginQuery = "SELECT * FROM customer where username = '"+username+"';";
+		
+		PreparedStatement stmt;
+		try {
+			stmt = connection.prepareStatement(loginQuery);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				
+				if(rs.getString(8).equals(username) && rs.getString(9).equals(password) )
+				{
+				flag = true;
+				System.out.println("Login Successful ");
+				currentCustomer.setCustomerid(rs.getInt(1));
+				currentCustomer.setCustomerName(rs.getString(2));
+				currentCustomer.setGender(rs.getString(3));
+				currentCustomer.setContactNo(rs.getLong(4));
+				currentCustomer.setEmail(rs.getString(5));
+				currentCustomer.setAddress(rs.getString(6));
+				currentCustomer.setPincode(rs.getInt(7));
+				currentCustomer.setUsername(rs.getString(8));
+				currentCustomer.setPassword(rs.getString(9));
+				}
+				else {
+					System.out.println("Invalid Customer Data");
+				}
+			}
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
+		
+		
+		System.out.println("flag :"+flag);
+		return flag;
 	}
 
 	@Override
