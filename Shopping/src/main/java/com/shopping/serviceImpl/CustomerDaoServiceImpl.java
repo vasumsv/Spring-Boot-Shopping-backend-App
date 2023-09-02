@@ -125,6 +125,22 @@ public class CustomerDaoServiceImpl implements CustomerDaoService {
 		}
 			
 	}
+
+	@Override
+	public void deleteCustomer(String username) {
+		
+		String deleteQuery = "DELETE FROM CUSTOMER WHERE username = '"+username+"'";
+		
+		PreparedStatement stmt;
+		try {
+			stmt = connection.prepareStatement(deleteQuery);
+			stmt.executeUpdate();
+			System.out.println("Customer data deleted successfully");
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+	}
 	
 	
 	
